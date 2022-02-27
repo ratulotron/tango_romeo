@@ -1,0 +1,455 @@
+openapi: '3.0.2'
+info:
+  description: This is the backend API for Tango Romeo, intended to be used by the frontend.
+  version: "1.0.0"
+  title: TangoRomeo Backend API
+  license:
+    name: MIT License
+    url: 'https://spdx.org/licenses/MIT.html'
+tags:
+  - name: techs
+    description: tech related endpoints
+  - name: types
+    description: technology type related endpoints
+  - name: statuses
+    description: adoption status related to tech
+paths:
+  /healthcheck:
+    get:
+      tags:
+        - debug
+      summary: healthcheck endpoint
+      operationId: healthcheck
+      description: |
+        Endpoint to check app health status
+      responses:
+        '200':
+          description: status of the app
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Healthcheck'
+  /techs:
+    get:
+      tags:
+        - techs
+      summary: fetches all techs
+      operationId: getAllTech
+      description: |
+        Fetchs all techs available in the database including their types and adoption status
+      parameters:
+        - in: query
+          name: type
+          description: pass an optional parameter to filter by type of technology
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: status
+          description: pass an optional parameter to filter by adoption status
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tech'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - techs
+      summary: adds a new tech
+      operationId: addTech
+      description: Adds a new technology to the system
+      responses:
+        '201':
+          description: tech created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tech'
+        description: Tech item to add
+  /techs/{techID}:
+    get:
+      tags:
+        - techs
+      summary: fetches a tech item by ID
+      operationId: getSingleTech
+      description: |
+        Fetchs one single tech available in the database depending on their ID
+      parameters:
+        - in: path
+          name: techID
+          description: ID of a technology in TangoRomeo
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: provide a single tech
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tech'
+        '404':
+          description: tech not found
+    put:
+      tags:
+        - techs
+      summary: updates single tech by ID
+      operationId: updateSingleTech
+      description: |
+        Updates a tech in TangoRomeo
+      parameters:
+        - in: path
+          name: techID
+          description: ID of a technology in TangoRomeo
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: return updated body of the tech
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tech'
+        '400':
+          description: error in payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveError'
+        '404':
+          description: tech not found
+    delete:
+      tags:
+        - techs
+      summary: deletes single tech by ID
+      operationId: deleteSingleTech
+      description: |
+        Delete a tech in TangoRomeo
+      parameters:
+        - in: path
+          name: techID
+          description: ID of a technology in TangoRomeo
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: deletion successful
+        '404':
+          description: tech not found
+  /types:
+    get:
+      tags:
+        - types
+      summary: fetches all tech types
+      operationId: getAllType
+      description: |
+        Fetchs all types available
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Type'
+    post:
+      tags:
+        - types
+      summary: adds a new tech type
+      operationId: addType
+      description: Adds a new tech type
+      responses:
+        '201':
+          description: type created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Type'
+        description: Type item to add
+  /type/{typeID}:
+    get:
+      tags:
+        - types
+      summary: fetches a tech type by ID
+      operationId: getSingleType
+      description: |
+        Fetchs one single tech type by ID
+      parameters:
+        - in: path
+          name: typeID
+          description: ID of a technology type in TangoRomeo
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: provide a single tech type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Type'
+        '404':
+          description: tech type not found
+    put:
+      tags:
+        - types
+      summary: updates single tech type by ID
+      operationId: updateSingleType
+      description: |
+        Updates a tech type in TangoRomeo
+      parameters:
+        - in: path
+          name: typeID
+          description: ID of a technology type in TangoRomeo
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: return updated body of the tech
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tech'
+        '400':
+          description: error in payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveError'
+        '404':
+          description: tech type not found
+    delete:
+      tags:
+        - types
+      summary: deletes single tech by ID
+      operationId: deleteSingleType
+      description: |
+        Delete a tech in TangoRomeo
+      parameters:
+        - in: path
+          name: typeID
+          description: ID of a technology type in TangoRomeo
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: deletion successful
+        '404':
+          description: tech not found
+
+  /statuses:
+    get:
+      tags:
+        - statuses
+      summary: fetches all adoption statuses
+      operationId: getAllStatus
+      description: |
+        Fetchs all types available
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+    post:
+      tags:
+        - statuses
+      summary: adds a new status
+      operationId: addStatus
+      description: Adds a new status
+      responses:
+        '201':
+          description: status created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Status'
+        description: Status item to add
+  /status/{statusID}:
+    get:
+      tags:
+        - statuses
+      summary: fetches an adoption status by ID
+      operationId: getSingleStatus
+      description: |
+        Fetchs one single status by ID
+      parameters:
+        - in: path
+          name: statusID
+          description: ID of an adoption status
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: provide a single status body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        '404':
+          description: status not found
+    put:
+      tags:
+        - statuses
+      summary: updates single status by ID
+      operationId: updateSingleStatus
+      description: |
+        Updates a status
+      parameters:
+        - in: path
+          name: statusID
+          description: ID of an adoption status
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: return updated body of the status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: error in payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveError'
+        '404':
+          description: tech type not found
+    delete:
+      tags:
+        - statuses
+      summary: deletes single status by ID
+      operationId: deleteSingleStatus
+      description: |
+        Delete a status
+      parameters:
+        - in: path
+          name: statusID
+          description: ID of adoption status
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: deletion successful
+        '404':
+          description: status not found
+
+components:
+  schemas:
+    Tech:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Django
+        created_at:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        type:
+          $ref: '#/components/schemas/Type'
+        status:
+          $ref: '#/components/schemas/Status'
+    Type:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Language
+    Status:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Language
+        description:
+          type: string
+          example: This is a specific programming language.
+        color:
+          type: string
+          example: #000000
+    SaveError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: There was an error in saving the item
+    Healthcheck:
+      type: object
+      properties:
+        status:
+          type: string
+          example: Everything is running smoothly
+        db:
+          type: string
+          example: Connected

@@ -9,6 +9,7 @@
 # Go
 /backend/vendor/
 /backend/tmp/
+/backend/.iris.yml
 
 # Vue
 /frontend/node_modules/
