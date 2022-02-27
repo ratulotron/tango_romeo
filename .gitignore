@@ -16,3 +16,6 @@
 /frontend/dist/
 /frontend/npm-debug.log
 /frontend/yarn-error.log
+
+# Binaries
+/backend/tango-romeo
