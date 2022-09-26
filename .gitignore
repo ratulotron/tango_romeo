@@ -1,0 +1,21 @@
+# Go
+*.out
+vendor
+
+# NodeJS
+node_modules
+
+# JetBrains
+*.iws
+.idea
+
+# VS Code
+.vscode
+*.code-workspace
+
+# macOS
+.DS_Store
+._*
+
+# Project related
+output

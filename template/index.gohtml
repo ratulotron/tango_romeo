@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style lang="css">
+        :root {
+            --base03: #002b36;
+            --base02: #073642;
+            --base01: #586e75;
+            --base00: #657b83;
+            --base0: #839496;
+            --base1: #93a1a1;
+            --base2: #eee8d5;
+            --base3: #fdf6e3;
+            --yellow: #b58900;
+            --orange: #cb4b16;
+            --red: #dc322f;
+            --magenta: #d33682;
+            --violet: #6c71c4;
+            --blue: #268bd2;
+            --cyan: #2aa198;
+            --green: #859900;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--base02);
+            color: var(--blue);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: var(--green);
+        }
+
+        .container {
+            margin: 20px;
+
+        }
+
+        .statuses {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-around;
+        }
+
+        .status {
+            flex-basis: 50%;
+        }
+
+        .tech {
+            border: 0.5px solid var(--magenta);
+            border-radius: 5px;
+            padding: 0 2vw;
+            margin: 5px;
+
+            /* background-color: grey; */
+        }
+    </style>
+</head>
+
+<body>
+    {{ $statuses := .Statuses }}
+    {{ $techs := .Technologies }}
+    <div class="container">
+        <div>
+            <h1>Tech Radar</h1>
+            <div class="statuses">
+                {{ range $statuses }}
+                {{$statusName := .}}
+                <div class="status {{ $statusName }}">
+                    <h3>{{ $statusName | ToUpper }}</h3>
+                    {{ range $techs }}
+                    {{ if eq .TechStatus $statusName}}
+                    <article class="tech">
+                        <p>Name: {{ .Name }} </p>
+                        <p>Type: {{ .TechType }} </p>
+                        <p>Status: {{ .TechStatus }} </p>
+                        <p>Description: {{ .Description }}</p>
+                    </article>
+                    {{ end }}
+                    {{ end }}
+                </div>
+                {{ end}}
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
