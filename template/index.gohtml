@@ -46,21 +46,26 @@
 
         .statuses {
             display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-around;
+            flex-wrap: wrap;
         }
 
         .status {
-            flex-basis: 50%;
+            flex-grow: 1;
+            flex-shrink: 0;
+            flex-basis: calc(45% - 10px);
+
+            /* explanation below */
+            /* margin: 5px; */
+            /* height: 100px; */
+            /* background-color: blue; */
         }
 
         .tech {
-            border: 0.5px solid var(--magenta);
-            border-radius: 5px;
+            box-sizing: border-box;
+            border: 1.5px solid var(--magenta);
+            border-radius: 10px;
             padding: 0 2vw;
             margin: 5px;
-
-            /* background-color: grey; */
         }
     </style>
 </head>
@@ -72,23 +77,22 @@
         <div>
             <h1>Tech Radar</h1>
             <div class="statuses">
-                {{ range $statuses }}
-                {{$statusName := .}}
+                {{- range $statuses }}
+                {{- $statusName := .}}
                 <div class="status {{ $statusName }}">
-                    <h3>{{ $statusName | ToUpper }}</h3>
-                    {{ range $techs }}
-                    {{ if eq .TechStatus $statusName}}
+                    <h3>{{- $statusName | ToUpper }}</h3>
+                    {{- range $techs }}
+                    {{- if eq .TechStatus $statusName}}
                     <article class="tech">
                         <p>Name: {{ .Name }} </p>
                         <p>Type: {{ .TechType }} </p>
                         <p>Status: {{ .TechStatus }} </p>
                         <p>Description: {{ .Description }}</p>
                     </article>
-                    {{ end }}
-                    {{ end }}
+                    {{- end }}
+                    {{- end }}
                 </div>
-                {{ end}}
-
+                {{- end }}
             </div>
         </div>
     </div>
