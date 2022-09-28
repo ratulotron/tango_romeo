@@ -10,6 +10,19 @@ import (
 	"github.com/spf13/viper"
 )
 
+/*
+	Types:
+		- Datastore
+		- Data Management
+		- Infrastructure
+		- Languages
+	Statuses:
+		- adopt
+		- assess
+		- trial
+		- hold
+*/
+
 type (
 	/* Tech Radar */
 	Tech struct {
